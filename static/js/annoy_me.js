@@ -6840,7 +6840,7 @@
 						style: {
 							marginTop: "2px"
 						},
-						children: ["Follow Zain Sadaqat on", " ", (0, i.jsx)("a", {
+						children: ["Follow Vethanathan on", " ", (0, i.jsx)("a", {
 							href: "https://www.linkedin.com/in/vethanathan/",
 							children: "LinkedIn"
 						}), " and", " ", (0, i.jsx)("a", {
