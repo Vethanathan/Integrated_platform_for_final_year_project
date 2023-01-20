@@ -13,4 +13,10 @@ app.secret_key='a'
 def index():
     return render_template('home.html')
 
+@app.route('/success',methods=["POST"])
+def final():
+    if request.method == 'POST':
+        print("hiii")
+    return "success"
+
 app.run(debug=1)
