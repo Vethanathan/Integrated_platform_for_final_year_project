@@ -1,2 +1,2 @@
 # Integrated_platform_for_final_year_project
-ntegrated_platform_for_final_year_project
+Integrated_platform_for_final_year_project
