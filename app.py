@@ -84,6 +84,8 @@ def plaigarism():
     if form.validate_on_submit():
         textarea = form.textarea.data
         copied_links,word_count,Index_value=Ironman.plag_cheker(textarea)
+        print(copied_links)
+        return render_template("plaigarism.html",data = copied_links,form=form,textarea=textarea)
     return render_template("plaigarism.html",form=form,textarea=textarea)
 @app.route('/vetha',methods=["POST"])
 def vetha():

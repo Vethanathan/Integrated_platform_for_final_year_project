@@ -60,7 +60,12 @@
        
       </form>
       
-
+        <ol class="list-group">
+        {% for item in data %}
+            <li class="list-group-item"> <a href="{{ item }}"> {{ item }}</a></li>
+        {% endfor %}
+        </ol>
+      
     <!-- Optional JavaScript -->
     <script defer="defer" src="{{ url_for('static',filename='js/plaigarism.js') }}"></script>
 
