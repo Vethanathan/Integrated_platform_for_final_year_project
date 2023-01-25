@@ -163,4 +163,4 @@ def vetha():
     #         f.write(html.replace("<!-- <p>vetha</p> -->", string))
     return render_template("dashboard.html")
 
-app.run(debug=1)
+app.run(debug=False,host='0.0.0.0')
