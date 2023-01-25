@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
+from flask import Flask, render_template, flash, redirect, url_for, session, request, logging,send_file
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, IntegerField,FileField, SubmitField
 import ibm_db
 from passlib.hash import sha256_crypt
@@ -10,7 +10,27 @@ import os
 from wtforms.validators import InputRequired,DataRequired
 import daredevil
 import Ironman
+import bcrypt
+import mysql.connector
+import zipping
 
+def hash_it(password):
+
+    bytes = password.encode('utf-8')
+    hash = bcrypt.hashpw(bytes, b'$2b$12$ikFJLhhV.1ziQsq0cT94IO')
+    hash=str(hash)
+    return hash[2:-1]
+
+mydb = mysql.connector.connect(
+    host="sql12.freesqldatabase.com",
+    user="sql12592957",
+    passwd="QuJkuAYhUk",
+    database="sql12592957"
+    
+)
+my_cursor = mydb.cursor()
+global current_filename
+file_name=''
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey'
 app.config['UPLOAD_FOLDER'] = 'static/files'
@@ -34,12 +54,33 @@ def index():
 def home():
     return render_template('dashboard.html')
 
+@app.route('/accounts')
+def accounts():
+    return render_template('accounts.html')
+
+@app.route('/update_signup',methods=["POST"])
+def validate():
+    first_name=request.form.get("first_name")
+    last_name=request.form.get("last_name")
+    email=request.form.get("email")
+    password=request.form.get("password")
+    q="INSERT INTO Details (first_name, last_name, username, password) VALUES ('{first_name}', '{last_name}', '{email}', '{password}');".format(first_name=first_name,last_name=last_name,email=email,password=hash_it(password))
+    print(q)
+    my_cursor.execute(q)
+    mydb.commit()
+
+    return render_template("home.html")
+
 @app.route('/dashboard',methods=["POST"])
 def final():
     user_name=request.form.get("email")
     password=request.form.get("password")
     print(user_name,password)
-    if user_name=="vethanathanvk@gmail.com" and password=="qwerty@12345":
+    q="SELECT * FROM Details;"# where email='{user_name}' and 'password='{password}';".format(user_name=user_name,password=hash_it(password))
+    my_cursor.execute(q)
+    out = my_cursor.fetchall()[0]
+
+    if out[2] == user_name and out[3] == hash_it(password):
         return render_template("dashboard.html")
     else:
         return render_template("home.html")
@@ -48,8 +89,17 @@ def final():
 def dashboard():
     return render_template('signup.html')
 
+@app.route('/download/<filename>')
+def download(filename):
+    try:
+        path = "static\\files\\{}".format(filename)
+        print(path)
+        return send_file(path, as_attachment=True)
+    except Exception as e:
+        return str(e)
 @app.route('/upload',methods=["GET","POST"])
 def upload():
+    global current_filename
     form = UploadFileForm()
     Project_Name = None
     Author_Name = None
@@ -59,8 +109,9 @@ def upload():
         Author_Name = form.Author_Name.data
         form.Author_Name.data = ' '
         file = form.file.data # First grab the file
+        current_filename = file.filename
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
-        string=daredevil.customize_card(Project_Name,Author_Name)
+        string=daredevil.customize_card(Project_Name,Author_Name,current_filename)
         fin = open("templates\\dashboard.html", "rt")
         #read file contents to string
         data = fin.read()
@@ -74,7 +125,8 @@ def upload():
         fin.write(data)
         #close the file
         fin.close()
-        return "File has been uploaded."
+        zipping.unzip(current_filename)
+        return url_for('home')
     return render_template('upload.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
     
 @app.route('/plaigarism',methods=["GET","POST"])
