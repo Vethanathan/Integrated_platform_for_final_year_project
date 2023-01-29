@@ -49,41 +49,7 @@
         
       </div>
     </nav>
-    <style>
-        .card {
-          width: 100%;
-          margin-bottom: 20px;
-          border: none;
-          border-radius: 6px;
-        }
-      
-        .card-header {
-          background-color: #f7f7f7;
-          padding: 10px 20px;
-          border-radius: 6px 6px 0 0;
-        }
-      
-        .card-body {
-          padding: 20px;
-        }
-      
-        .card-body table {
-          width: 100%;
-          margin-bottom: 0;
-          border-collapse: collapse;
-        }
-      
-        .card-body th,
-        .card-body td {
-          padding: 10px;
-          border: 1px solid #dddddd;
-          text-align: left;
-        }
-      
-        .card-body th {
-          background-color: #f7f7f7;
-        }
-      </style>
+
       
       <div class="card">
         <div class="card-header">
@@ -98,7 +64,7 @@
               </tr>
             </thead>
             <tbody>
-              {% for key, value in my_dict.items() %}
+              {% for key, value in dict.items() %}
               <tr>
                 <td>{{ key }}</td>
                 <td>
@@ -112,7 +78,17 @@
           </table>
         </div>
       </div>
+      <br>
+      <br>
+      <br>
       
+
+      <div class="container">
+      <img class="mx-auto" src="static\images\{{file}}" alt="image">
+      <img src="{{ url_for('static', filename='images/Index_chart.png') }}">
+      <img src="{{ url_for('static', filename='images/Plag_chart.png') }}">
+
+    </div>
       
     <!-- Optional JavaScript -->
     <script defer="defer" src="{{ url_for('static',filename='js/plaigarism.js') }}"></script>

@@ -14,7 +14,7 @@ import Ironman
 import bcrypt
 import mysql.connector
 import zipping
-
+import matplotlib.pyplot as plt
 def hash_it(password):
 
     bytes = password.encode('utf-8')
@@ -134,11 +134,28 @@ def upload():
         # return url_for('home')
         # string = zipping.stringyfy()
         path_list=zipping.list_files("static\\files\\extracted\\"+filename_alias)
-        plag_flag , value = deadpool.is_plag(path_list)
-        # print(plag_flag,value)
+        plag_flag , value,index = deadpool.is_plag(path_list)
+        if len(value) < 2:
+            v = "1.png"
+        elif len(value) < 5:
+            v="2.png"
+        elif len(value) < 7:
+            v="3.png"
+        else:
+            v="4.png"
+        print()
         global_dict = value
         if plag_flag:
-            return render_template("valid.html",dict = global_dict)
+            labels = ["Plag_Index","Unplag_Index"]
+            values = [round(float(index)),100-round(float(index))]
+            plt.pie(values, labels=labels)
+            plt.savefig('static/images/Index_chart.png')
+
+            labels = ["Copied","own content"]
+            values = [len(value)*10,100-(len(value)*10)]
+            plt.pie(values, labels=labels)
+            plt.savefig('static/images/Plag_chart.png')
+            return render_template("valid.html",dict = global_dict,file=v)
         else:
             pass
         
@@ -146,6 +163,14 @@ def upload():
         return render_template('dashboard.html')
     return render_template('upload.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
     
+@app.route("/ve")
+def ve():
+    labels = ['Jan', 'Feb', 'Mar', 'Apr']
+    values = [12, 19, 3, 5]
+
+    plt.pie(labels, values)
+    plt.savefig('static/images/chart.png')
+    return render_template("test.html")
 @app.route('/valid')
 def valid():
     return render_template("valid.html",dict = global_dict)
