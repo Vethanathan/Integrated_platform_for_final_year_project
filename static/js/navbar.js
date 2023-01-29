@@ -1,3 +1,8 @@
+function showLoadingCursor() {
+  document.body.classList.add("loading-cursor");
+}
+
+
 let darkModeSwitch = document.getElementById('darkModeSwitch');
 
 darkModeSwitch.addEventListener('change', function() {

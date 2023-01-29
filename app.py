@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging,send_file
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, IntegerField,FileField, SubmitField
 import ibm_db
+import daredevil
 from passlib.hash import sha256_crypt
 from functools import wraps
 from sendgrid import *
@@ -8,7 +9,7 @@ from flask_wtf import FlaskForm
 from werkzeug.utils import secure_filename
 import os
 from wtforms.validators import InputRequired,DataRequired
-import daredevil
+import deadpool
 import Ironman
 import bcrypt
 import mysql.connector
@@ -30,6 +31,7 @@ mydb = mysql.connector.connect(
 )
 my_cursor = mydb.cursor()
 global current_filename
+global global_dict
 file_name=''
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey'
@@ -40,7 +42,7 @@ class UploadFileForm(FlaskForm):
     Project_Name =  StringField("Name of the Project: ",validators=[DataRequired()])
     Author_Name =  StringField("Name of the Author: ",validators=[DataRequired()])
     file = FileField("File", validators=[InputRequired()])
-    submit = SubmitField("Upload File")
+    submit = SubmitField("Upload File",)
 
 class TextAreaForm(FlaskForm):
     textarea  = StringField("Enter the text you want to check for plaigarism : ",validators=[DataRequired()])
@@ -99,6 +101,7 @@ def download(filename):
         return str(e)
 @app.route('/upload',methods=["GET","POST"])
 def upload():
+    global global_dict
     global current_filename
     form = UploadFileForm()
     Project_Name = None
@@ -125,10 +128,27 @@ def upload():
         fin.write(data)
         #close the file
         fin.close()
+        filename_alias,extension = current_filename.split('.')
+
         zipping.unzip(current_filename)
-        return url_for('home')
+        # return url_for('home')
+        # string = zipping.stringyfy()
+        path_list=zipping.list_files("static\\files\\extracted\\"+filename_alias)
+        plag_flag , value = deadpool.is_plag(path_list)
+        # print(plag_flag,value)
+        global_dict = value
+        if plag_flag:
+            return render_template("valid.html",dict = global_dict)
+        else:
+            pass
+        
+
+        return render_template('dashboard.html')
     return render_template('upload.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
     
+@app.route('/valid')
+def valid():
+    return render_template("valid.html",dict = global_dict)
 @app.route('/plaigarism',methods=["GET","POST"])
 def plaigarism():
     form = TextAreaForm()

@@ -49,30 +49,70 @@
         
       </div>
     </nav>
-
-      <form method='POST' enctype='multipart/form-data'>
-        <br/>
-       <h1> Plaigarism checker!!!</h1>
-       
-       <fieldset>
-        {{form.hidden_tag()}}
-        {{form.textarea.label()}}
-        {{form.textarea()}}
-        
-        
-       
-        {{form.submit()}}
-       
-         
-       <!-- <button type="submit">Sign Up</button> -->
-       
-      </form>
+    <style>
+        .card {
+          width: 100%;
+          margin-bottom: 20px;
+          border: none;
+          border-radius: 6px;
+        }
       
-        <ol class="list-group">
-        {% for item in data %}
-            <li class="list-group-item"> <a href="{{ item }}"> {{ item }}</a></li>
-        {% endfor %}
-        </ol>
+        .card-header {
+          background-color: #f7f7f7;
+          padding: 10px 20px;
+          border-radius: 6px 6px 0 0;
+        }
+      
+        .card-body {
+          padding: 20px;
+        }
+      
+        .card-body table {
+          width: 100%;
+          margin-bottom: 0;
+          border-collapse: collapse;
+        }
+      
+        .card-body th,
+        .card-body td {
+          padding: 10px;
+          border: 1px solid #dddddd;
+          text-align: left;
+        }
+      
+        .card-body th {
+          background-color: #f7f7f7;
+        }
+      </style>
+      
+      <div class="card">
+        <div class="card-header">
+          <h5>My Table</h5>
+        </div>
+        <div class="card-body">
+          <table>
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for key, value in my_dict.items() %}
+              <tr>
+                <td>{{ key }}</td>
+                <td>
+                  {% for item in value %}
+                    <a href="{{ item }}">{{ item }}</a><br>
+                  {% endfor %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
       
     <!-- Optional JavaScript -->
     <script defer="defer" src="{{ url_for('static',filename='js/plaigarism.js') }}"></script>
