@@ -1,10 +1,9 @@
+import shutil
 import os
+folder_path = "static\\files\\extracted"
 
-directory = 'C:\\Users\\vetha\\Desktop\\New folder (2)'
-
-for root, dirs, files in os.walk(directory):
-    for filename in files:
-        path=os.path.join(root, filename)
-        with open(path, 'r') as file:
-            content = '\n'.join(file.readlines())
-
+if os.path.exists(folder_path):
+    shutil.rmtree(folder_path)
+    print(f"{folder_path} has been deleted.")
+else:
+    print(f"{folder_path} does not exist.")

@@ -15,6 +15,10 @@ import bcrypt
 import mysql.connector
 import zipping
 import matplotlib.pyplot as plt
+import os
+import shutil
+
+
 def hash_it(password):
 
     bytes = password.encode('utf-8')
@@ -114,20 +118,7 @@ def upload():
         file = form.file.data # First grab the file
         current_filename = file.filename
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
-        string=daredevil.customize_card(Project_Name,Author_Name,current_filename)
-        fin = open("templates\\dashboard.html", "rt")
-        #read file contents to string
-        data = fin.read()
-        #replace all occurrences of the required string
-        data = data.replace("<!-- <p>vetha</p> -->", string)
-        #close the input file
-        fin.close()
-        #open the input file in write mode
-        fin = open("templates\\dashboard.html", "wt")
-        #overrite the input file with the resulting data
-        fin.write(data)
-        #close the file
-        fin.close()
+        
         filename_alias,extension = current_filename.split('.')
 
         zipping.unzip(current_filename)
@@ -136,16 +127,29 @@ def upload():
         path_list=zipping.list_files("static\\files\\extracted\\"+filename_alias)
         plag_flag , value,index = deadpool.is_plag(path_list)
         if len(value) < 2:
-            v = "1.png"
+            v = "2.png"
         elif len(value) < 5:
-            v="2.png"
-        elif len(value) < 7:
             v="3.png"
         else:
             v="4.png"
         print()
         global_dict = value
         if plag_flag:
+            file_path = "static\\files\\"+current_filename
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            else:
+                print("illaa")
+
+            folder_path = "static\\files\\extracted\\"+filename_alias
+
+            if os.path.exists(folder_path):
+                shutil.rmtree(folder_path)
+                print(f"{folder_path} has been deleted.")
+            else:
+                print(f"{folder_path} does not exist.")
+                        
+
             labels = ["Plag_Index","Unplag_Index"]
             values = [round(float(index)),100-round(float(index))]
             plt.pie(values, labels=labels)
@@ -157,7 +161,21 @@ def upload():
             plt.savefig('static/images/Plag_chart.png')
             return render_template("valid.html",dict = global_dict,file=v)
         else:
-            pass
+            string=daredevil.customize_card(Project_Name,Author_Name,current_filename)
+            fin = open("templates\\dashboard.html", "rt")
+            #read file contents to string
+            data = fin.read()
+            #replace all occurrences of the required string
+            data = data.replace("<!-- <p>vetha</p> -->", string)
+            #close the input file
+            fin.close()
+            #open the input file in write mode
+            fin = open("templates\\dashboard.html", "wt")
+            #overrite the input file with the resulting data
+            fin.write(data)
+            #close the file
+            fin.close()
+            return "nee pozhachipa da!!!"
         
 
         return render_template('dashboard.html')
