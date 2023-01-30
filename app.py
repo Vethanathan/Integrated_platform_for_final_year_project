@@ -1,6 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging,send_file
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, IntegerField,FileField, SubmitField
-import ibm_db
 import daredevil
 from passlib.hash import sha256_crypt
 from functools import wraps
