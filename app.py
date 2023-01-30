@@ -3,7 +3,6 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators,
 import daredevil
 from passlib.hash import sha256_crypt
 from functools import wraps
-from sendgrid import *
 from flask_wtf import FlaskForm
 from werkzeug.utils import secure_filename
 import os
