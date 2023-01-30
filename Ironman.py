@@ -1,9 +1,7 @@
 import requests
 import json
-import pyfiglet
 def plag_cheker(text_to_check):
-    banner = pyfiglet.figlet_format("vetha")
-    print(banner)
+
     # text_to_check = input("[?] Input text to check with Turnitin > ")
 
     burp0_url = "https://papersowl.com:443/plagiarism-checker-send-data"
