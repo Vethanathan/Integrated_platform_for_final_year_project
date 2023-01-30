@@ -12,8 +12,6 @@ numpy
 packaging
 passlib
 Pillow
-pyfiglel
-pyparsing==3.0.9
 python-dateutil
 requests
 six
