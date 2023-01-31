@@ -101,6 +101,25 @@ def download(filename):
         return send_file(path, as_attachment=True)
     except Exception as e:
         return str(e)
+
+@app.route('/temp',methods=["GET","POST"])
+def temp():
+    form = UploadFileForm()
+    Project_Name = None
+    Author_Name = None
+    if form.validate_on_submit():
+        Project_Name = form.Project_Name.data
+        form.Project_Name.data = ' '
+        Author_Name = form.Author_Name.data
+        form.Author_Name.data = ' '
+        file = form.file.data # First grab the file
+        current_filename = file.filename
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
+        return "success"
+    return render_template('v.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
+    
+
+
 @app.route('/upload',methods=["GET","POST"])
 def upload():
     global global_dict
