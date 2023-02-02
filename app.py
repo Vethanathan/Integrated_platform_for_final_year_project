@@ -198,14 +198,7 @@ def upload():
         
     return render_template('upload.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
     
-@app.route("/ve")
-def ve():
-    labels = ['Jan', 'Feb', 'Mar', 'Apr']
-    values = [12, 19, 3, 5]
 
-    plt.pie(labels, values)
-    plt.savefig('static/images/chart.png')
-    return render_template("test.html")
 @app.route('/valid')
 def valid():
     return render_template("valid.html",dict = global_dict)
@@ -219,29 +212,6 @@ def plaigarism():
         print(copied_links)
         return render_template("plaigarism.html",data = copied_links,form=form,textarea=textarea)
     return render_template("plaigarism.html",form=form,textarea=textarea)
-@app.route('/vetha',methods=["POST"])
-def vetha():
-    print("inga iruken")
-    string='<div class="col-md-4"> <div class="card p-3 mb-2"> <div class="d-flex justify-content-between"> <div class="d-flex flex-row align-items-center"> <div class="icon"> <i class="bx bxl-mailchimp"></i> </div> <div class="ms-2 c-details"> <h6 class="mb-0">Vethanathan</h6> <span>4 days ago</span> </div> </div> <div class="badge"> <span>Python</span> </div> </div> <div class="mt-5"> <h3 class="heading">Automatic Attendence System</h3><br> <div class="badge"><button class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Download </button> </div> <div class="mt-5"></div> </div> </div> </div> \n <!-- <p>vetha</p> -->'
-    fin = open("templates\\dashboard.html", "rt")
-    #read file contents to string
-    data = fin.read()
-    #replace all occurrences of the required string
-    data = data.replace("<!-- <p>vetha</p> -->", '<div class="col-md-4"> <div class="card p-3 mb-2"> <div class="d-flex justify-content-between"> <div class="d-flex flex-row align-items-center"> <div class="icon"> <i class="bx bxl-mailchimp"></i> </div> <div class="ms-2 c-details"> <h6 class="mb-0">Vethanathan</h6> <span>4 days ago</span> </div> </div> <div class="badge"> <span>Python</span> </div> </div> <div class="mt-5"> <h3 class="heading">Automatic Attendence System</h3><br> <div class="badge"><button class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Download </button> </div> <div class="mt-5"></div> </div> </div> </div> \n <!-- <p>vetha</p> -->')
-    #close the input file
-    fin.close()
-    #open the input file in write mode
-    fin = open("templates\\dashboard.html", "wt")
-    #overrite the input file with the resulting data
-    fin.write(data)
-    #close the file
-    fin.close()
-    # with open("templates\\upload.html", "r+") as f:
-    #         print("naana vandhuten daaa!!!")
-    #         html = f.read()
-    #         f.seek(0)
-    #         f.write(html.replace("<!-- <p>vetha</p> -->", string))
-    return render_template("dashboard.html")
 
 
 # app.run(debug=1)
