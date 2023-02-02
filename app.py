@@ -244,4 +244,4 @@ def vetha():
     return render_template("dashboard.html")
 
 
-app.run(debug=1)
+# app.run(debug=1)
