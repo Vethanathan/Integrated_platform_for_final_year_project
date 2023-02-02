@@ -16,9 +16,29 @@ import mysql.connector
 import zipping
 import matplotlib.pyplot as plt
 import os
+from Ghost import gimme_string
 import shutil
+from dotenv import load_dotenv
+load_dotenv()
+import os
+from supabase import create_client
+url ="https://hzmzxhzqslaoahheatdf.supabase.co"
+key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6bXp4aHpxc2xhb2FoaGVhdGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzUxNzcxODEsImV4cCI6MTk5MDc1MzE4MX0.BanV3RYn5QMXRMIIpCqGBplJllb57GAKKVpTpwl-xys"
+supabase = create_client(url, key)
 
-
+def hi(h):
+    k = list(h)[:-1][0][1]
+    u=[]
+    for i in k:
+        t=[]
+        for j in i:
+            t+=[i[j]]
+        # print(t)
+        date,junk=t[1].split('T')
+        time,j = junk.split(".")
+        r=[t[3],t[2],t[4],t[-1],time,date]
+        u+=[r]
+    return u
 def hash_it(password):
 
     bytes = password.encode('utf-8')
@@ -26,14 +46,6 @@ def hash_it(password):
     hash=str(hash)
     return hash[2:-1]
 
-mydb = mysql.connector.connect(
-    host="sql12.freesqldatabase.com",
-    user="sql12592957",
-    passwd="QuJkuAYhUk",
-    database="sql12592957"
-    
-)
-my_cursor = mydb.cursor()
 global current_filename
 global global_dict
 file_name=''
@@ -45,8 +57,10 @@ app.secret_key='a'
 class UploadFileForm(FlaskForm):
     Project_Name =  StringField("Name of the Project: ",validators=[DataRequired()])
     Author_Name =  StringField("Name of the Author: ",validators=[DataRequired()])
+    Language =  StringField("Language used : ",validators=[DataRequired()])
+
     file = FileField("File", validators=[InputRequired()])
-    submit = SubmitField("Upload File",)
+    submit = SubmitField("Upload File")
 
 class TextAreaForm(FlaskForm):
     textarea  = StringField("Enter the text you want to check for plaigarism : ",validators=[DataRequired()])
@@ -58,7 +72,8 @@ def index():
 
 @app.route('/home')
 def home():
-    return render_template('dashboard.html')
+    
+    return render_template('dashboard.html',data = hi(h = supabase.table("Projectdetails").select("*").execute()))
 
 @app.route('/accounts')
 def accounts():
@@ -70,10 +85,14 @@ def validate():
     last_name=request.form.get("last_name")
     email=request.form.get("email")
     password=request.form.get("password")
-    q="INSERT INTO Details (first_name, last_name, username, password) VALUES ('{first_name}', '{last_name}', '{email}', '{password}');".format(first_name=first_name,last_name=last_name,email=email,password=hash_it(password))
-    print(q)
-    my_cursor.execute(q)
-    mydb.commit()
+    json={
+        "username":email,
+        "password" : hash_it(password),
+        "first_name":first_name,
+        "last_name":last_name
+    }
+    supabase.table("Details").insert(json).execute()
+    
 
     return render_template("home.html")
 
@@ -81,13 +100,12 @@ def validate():
 def final():
     user_name=request.form.get("email")
     password=request.form.get("password")
-    print(user_name,password)
-    q="SELECT * FROM Details;"# where email='{user_name}' and 'password='{password}';".format(user_name=user_name,password=hash_it(password))
-    my_cursor.execute(q)
-    out = my_cursor.fetchall()[0]
+    q = supabase.table("Details").select("*").execute()
+    out  = q.data[0]
+    print(out["username"],out["password"])
+    if out["username"] == user_name and out["password"]==hash_it(password):
 
-    if out[2] == user_name and out[3] == hash_it(password):
-        return render_template("dashboard.html")
+        return render_template("dashboard.html",data = hi(h = supabase.table("Projectdetails").select("*").execute()))
     else:
         return render_template("home.html")
 
@@ -95,14 +113,6 @@ def final():
 def dashboard():
     return render_template('signup.html')
 
-@app.route('/download/<filename>')
-def download(filename):
-    try:
-        path = "static\\files\\{}".format(filename)
-        print(path)
-        return send_file(path, as_attachment=True)
-    except Exception as e:
-        return str(e)
 @app.route('/upload',methods=["GET","POST"])
 def upload():
     global global_dict
@@ -110,75 +120,57 @@ def upload():
     form = UploadFileForm()
     Project_Name = None
     Author_Name = None
+    Language =None
     if form.validate_on_submit():
         Project_Name = form.Project_Name.data
         form.Project_Name.data = ' '
+        Language = form.Language.data
+        form.Language.data = ' '
         Author_Name = form.Author_Name.data
         form.Author_Name.data = ' '
-        file = form.file.data # First grab the file
+        file = form.file.data
         current_filename = file.filename
-        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
-        
-        filename_alias,extension = current_filename.split('.')
-
-        zipping.unzip(current_filename)
-        # return url_for('home')
-        # string = zipping.stringyfy()
-        path_list=zipping.list_files("static\\files\\extracted\\"+filename_alias)
-        plag_flag , value,index = deadpool.is_plag(path_list)
-        if len(value) < 2:
+        file.save("static/files/"+file.filename)
+        supabase.storage().from_("vetha").upload(file.filename,"static/files/"+file.filename)
+        url = supabase.storage().from_("vetha").get_public_url(file.filename)
+        print(url)
+        # exit()
+        string_dict = gimme_string(url)
+        plag_flag , value,index ,d= deadpool.is_plag(string_dict)
+        if value < 2:
             v = "2.png"
-        elif len(value) < 5:
+        elif value < 5:
             v="3.png"
         else:
             v="4.png"
         print()
-        global_dict = value
         if plag_flag:
-            file_path = "static\\files\\"+current_filename
-            if os.path.exists(file_path):
-                os.remove(file_path)
-            else:
-                print("illaa")
-
-            folder_path = "static\\files\\extracted\\"+filename_alias
-
-            if os.path.exists(folder_path):
-                shutil.rmtree(folder_path)
-                print(f"{folder_path} has been deleted.")
-            else:
-                print(f"{folder_path} does not exist.")
-                        
-
             labels = ["Plag_Index","Unplag_Index"]
             values = [round(float(index)),100-round(float(index))]
             plt.pie(values, labels=labels)
             plt.savefig('static/images/Index_chart.png')
 
             labels = ["Copied","own content"]
-            values = [len(value)*10,100-(len(value)*10)]
+            values = [value*10,100-(value*10)]
             plt.pie(values, labels=labels)
             plt.savefig('static/images/Plag_chart.png')
-            return render_template("valid.html",dict = global_dict,file=v)
+            return render_template("valid.html",dict = d,file=v)
         else:
-            string=daredevil.customize_card(Project_Name,Author_Name,current_filename)
-            fin = open("templates\\dashboard.html", "rt")
-            #read file contents to string
-            data = fin.read()
-            #replace all occurrences of the required string
-            data = data.replace("<!-- <p>vetha</p> -->", string)
-            #close the input file
-            fin.close()
-            #open the input file in write mode
-            fin = open("templates\\dashboard.html", "wt")
-            #overrite the input file with the resulting data
-            fin.write(data)
-            #close the file
-            fin.close()
-            return "nee pozhachipa da!!!"
+            flash("No chance of Plaigarism is found")
+            json={
+
+                "Projectname":Project_Name,
+                "Authorname":Author_Name,
+                "Language":Language,
+                "Filepath" : url
+            }
+            supabase.table("Projectdetails").insert(json).execute()
+            
+
+            return render_template('dashboard.html',data = hi(h = supabase.table("Projectdetails").select("*").execute()))
         
 
-        return render_template('dashboard.html')
+        
     return render_template('upload.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
     
 @app.route("/ve")
