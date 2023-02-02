@@ -14,5 +14,9 @@ def is_plag(dict):
             file_ctr+=1
             avg_index+=round(float(index))
         ctr+=1
-    print(True in boolean,file_ctr,avg_index//file_ctr,d)
-    return True in boolean,file_ctr,avg_index//file_ctr,d
+    if file_ctr==0:
+        print(True in boolean,file_ctr,0,d)
+        return True in boolean,file_ctr,0,d
+    else:
+        print(True in boolean,file_ctr,avg_index//file_ctr,d)
+        return True in boolean,file_ctr,avg_index//file_ctr,d
