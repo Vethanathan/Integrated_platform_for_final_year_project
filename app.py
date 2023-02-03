@@ -168,8 +168,8 @@ def upload():
             v="3.png"
         else:
             v="4.png"
-        print()
         if plag_flag:
+            supabase.storage().from_("vetha").move(file.filename, 'Plag/'+file.filename)
             labels = ["Plag_Index","Unplag_Index"]
             values = [round(float(index)),100-round(float(index))]
             plt.pie(values, labels=labels)
@@ -214,4 +214,4 @@ def plaigarism():
     return render_template("plaigarism.html",form=form,textarea=textarea)
 
 
-# app.run(debug=1)
+app.run(debug=1)
