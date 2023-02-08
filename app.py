@@ -65,6 +65,10 @@ class TextAreaForm(FlaskForm):
     textarea  = StringField("Enter the text you want to check for plaigarism : ",validators=[DataRequired()])
     submit = SubmitField("Check for plaigarsm")
 
+class ChatGPT(FlaskForm):
+    textarea  = StringField("Enter your query ?",validators=[DataRequired()])
+    submit = SubmitField("Hit me!!!")
+
 @app.route('/')
 def index():
     return render_template('home.html')
@@ -200,9 +204,15 @@ def upload():
     return render_template('upload.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
     
 
-@app.route('/chatbot')
+@app.route('/chatbot' ,methods = ["POST"])
 def chatbot():
-    return render_template("test.html")
+    form = ChatGPT()
+    textarea = None
+    if form.validate_on_submit():
+        textarea = form.textarea.data
+        return render_template("test.html",form =form ,item = answer(textarea))
+        
+    return render_template("test.html",form =form ,item ="")
 @app.route('/valid')
 def valid():
     return render_template("valid.html",dict = global_dict)
