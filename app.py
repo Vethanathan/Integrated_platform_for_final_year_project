@@ -17,6 +17,7 @@ import os
 from Ghost import gimme_string
 import shutil
 from dotenv import load_dotenv
+from gpt_vetha import answer
 load_dotenv()
 import os
 from supabase import create_client
@@ -199,6 +200,9 @@ def upload():
     return render_template('upload.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
     
 
+@app.route('/chatbot')
+def chatbot():
+    return render_template("test.html")
 @app.route('/valid')
 def valid():
     return render_template("valid.html",dict = global_dict)
