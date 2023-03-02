@@ -263,4 +263,4 @@ def plaigarism():
 
 
 #app.run(debug=1)
-app.run(debug=True, port=os.getenv("PORT", default=5000))
+app.run(debug=True, port=5000)
