@@ -18,16 +18,25 @@
    <script defer="defer" src="{{ url_for('static',filename='js/annoy_me.js') }}"></script>
     <!-- <script src="{{ url_for('static',filename='js/annoy_me.js') }}"></script> -->
 </body>
-<div class="container">
-    <form method="POST" action="/dashboard">
-        <h2>Login</h2>
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email" required>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required autocomplete>
-        <a href="/signup">New user ? Signup</a>
+<div class="login-page">
+    <div class="avatar">
+      <img src="https://cdn.pixabay.com/photo/2014/04/02/14/10/female-306407_960_720.png" alt="Avatar">
+    </div>
+    <div class="form">
+      <h2>Login</h2>
+      <form method="POST" action="/dashboard">
+        <input type="email" name="email" id="email"   placeholder="Email" class = "input-box" required>
+        <input type="password" name="password" placeholder="Password" id="password" required autocomplete>
+        <select name = "mode">
+          <option value="Normal">Normal</option>
+          <option value="Developer">Developer</option>
+          <option value="Linux">Linux</option>
+        </select>
         <button id="submitBtn">Submit</button>
-        <p id="help-text"></p>
-    </form>
-</div>
+      </form>
+      <p class="message">Not registered? <a href="/signup">Create an account</a></p>
+
+    </div>
+  </div>
+
 </html>

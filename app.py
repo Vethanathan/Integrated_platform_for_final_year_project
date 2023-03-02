@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request, logging,send_file
+from flask import Flask, render_template, flash, redirect, url_for, make_response,session, request, logging,send_file
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators, SelectField, IntegerField,FileField, SubmitField
 import daredevil
 from passlib.hash import sha256_crypt
@@ -10,15 +10,15 @@ from wtforms.validators import InputRequired,DataRequired
 import deadpool
 import Ironman
 import bcrypt
-import mysql.connector
 import zipping
 import matplotlib.pyplot as plt
 import os
 from Ghost import gimme_string
 import shutil
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 from gpt_vetha import answer
-load_dotenv()
+import plotly.graph_objs as go
+#load_dotenv()
 import os
 from supabase import create_client
 url ="https://hzmzxhzqslaoahheatdf.supabase.co"
@@ -32,7 +32,6 @@ def hi(h):
         t=[]
         for j in i:
             t+=[i[j]]
-        # print(t)
         date,junk=t[1].split('T')
         time,j = junk.split(".")
         r=[t[3],t[2],t[4],t[-1],time,date]
@@ -44,7 +43,7 @@ def hash_it(password):
     hash = bcrypt.hashpw(bytes, b'$2b$12$ikFJLhhV.1ziQsq0cT94IO')
     hash=str(hash)
     return hash[2:-1]
-
+global view
 global current_filename
 global global_dict
 file_name=''
@@ -69,14 +68,28 @@ class ChatGPT(FlaskForm):
     textarea  = StringField("Enter your query ?",validators=[DataRequired()])
     submit = SubmitField("Hit me!!!")
 
+@app.route('/chart')
+def chart():
+    x = [1, 2, 3, 4, 5]
+    y = [1, 4, 2, 3, 5]
+    fig = go.Figure(data=go.Scatter(x=x, y=y))
+    html = fig.to_html(full_html=False)
+    return render_template('chart.html', chart_html=html)
+
+
 @app.route('/')
 def index():
     return render_template('home.html')
 
+@app.route('/test')
+def test():
+    return render_template("base.html")
 @app.route('/home')
 def home():
+    global view
+    vetha = request.form.get("search")
     
-    return render_template('dashboard.html',data = hi(h = supabase.table("Projectdetails").select("*").execute()))
+    return render_template('dashboard.html',view=view,vetha=vetha,data = hi(h = supabase.table("Projectdetails").select("*").execute()))
 
 @app.route('/accounts')
 def accounts():
@@ -101,19 +114,32 @@ def validate():
 
 @app.route('/dashboard',methods=["POST"])
 def final():
+    global view
     user_name=request.form.get("email")
+    vetha = request.form.get("search")
+    mode = request.form.get("mode")
+    view=mode
+    print(view)
     password=request.form.get("password")
     q = supabase.table("Details").select("*").execute()
     out  = q.data[0]
     print(out["username"],out["password"])
     if out["username"] == user_name and out["password"]==hash_it(password):
 
-        return render_template("dashboard.html",data = hi(h = supabase.table("Projectdetails").select("*").execute()))
+        return render_template("dashboard.html",view=view,vetha=vetha , data = hi(h = supabase.table("Projectdetails").select("*").execute()))
     else:
         return render_template("home.html")
 
+
+@app.route('/but')
+def but():
+    supabase.storage().from_("vetha").upload("maxresdefault.jpg","https://i.ytimg.com/vi/4i-h-4IDUyA/maxresdefault.jpg")
+    return render_template('button.html')
+
+
 @app.route('/signup')
 def dashboard():
+    # html_content = get_html_content()
     return render_template('signup.html')
 
 @app.route('/download/<filename>')
@@ -142,9 +168,10 @@ def temp():
     return render_template('v.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
     
 
-
 @app.route('/upload',methods=["GET","POST"])
 def upload():
+    vetha = request.form.get("search")
+    global view
     global global_dict
     global current_filename
     form = UploadFileForm()
@@ -177,14 +204,19 @@ def upload():
             supabase.storage().from_("vetha").move(file.filename, 'Plag/'+file.filename)
             labels = ["Plag_Index","Unplag_Index"]
             values = [round(float(index)),100-round(float(index))]
-            plt.pie(values, labels=labels)
-            plt.savefig('static/images/Index_chart.png')
+            fig1 = go.Figure(data=[go.Pie(labels=labels, values=values)])
+
+            # Convert the figure to HTML
+            html1 = fig1.to_html(full_html=False)
+            
 
             labels = ["Copied","own content"]
             values = [value*10,100-(value*10)]
-            plt.pie(values, labels=labels)
-            plt.savefig('static/images/Plag_chart.png')
-            return render_template("valid.html",dict = d,file=v)
+            fig2 = go.Figure(data=[go.Pie(labels=labels, values=values)])
+
+            # Convert the figure to HTML
+            html2 = fig2.to_html(full_html=False)
+            return render_template("valid.html",dict = d,file=v,c1=html1,c2=html2)
         else:
             flash("No chance of Plaigarism is found")
             json={
@@ -197,35 +229,37 @@ def upload():
             supabase.table("Projectdetails").insert(json).execute()
             
 
-            return render_template('dashboard.html',data = hi(h = supabase.table("Projectdetails").select("*").execute()))
+            return render_template('dashboard.html',view=view,vetha=vetha,data = hi(h = supabase.table("Projectdetails").select("*").execute()))
         
 
         
-    return render_template('upload.html', form=form,Project_Name=Project_Name,Author_Name=Author_Name)
+    return render_template('upload.html', view=view,form=form,Project_Name=Project_Name,Author_Name=Author_Name)
     
 
-@app.route('/chatbot' ,methods = ["POST"])
+@app.route('/chatbot' ,methods = ["GET","POST"])
 def chatbot():
+    global view
     form = ChatGPT()
     textarea = None
     if form.validate_on_submit():
         textarea = form.textarea.data
-        return render_template("test.html",form =form ,item = answer(textarea))
+        return render_template("test.html",view=view,form =form ,item = answer(textarea))
         
-    return render_template("test.html",form =form ,item ="")
+    return render_template("test.html",view=view,form =form ,item ="")
 @app.route('/valid')
 def valid():
     return render_template("valid.html",dict = global_dict)
 @app.route('/plaigarism',methods=["GET","POST"])
 def plaigarism():
+    global view
     form = TextAreaForm()
     textarea = None
     if form.validate_on_submit():
         textarea = form.textarea.data
         copied_links,word_count,Index_value=Ironman.plag_cheker(textarea)
         print(copied_links)
-        return render_template("plaigarism.html",data = copied_links,form=form,textarea=textarea)
-    return render_template("plaigarism.html",form=form,textarea=textarea)
+        return render_template("plaigarism.html",view=view,data = copied_links,form=form,textarea=textarea)
+    return render_template("plaigarism.html",form=form,view=view,textarea=textarea)
 
 
 app.run(debug=1)

@@ -1,32 +1,254 @@
-<!DOCTYPE html>
+<link href="{{ url_for('static',filename='css/test.css') }}" rel="stylesheet">
+<!-- <link href="{{ url_for('static',filename='css/temp.css') }}" rel="stylesheet"> -->
+<script defer="defer" src="{{ url_for('static',filename='js/test.js') }}"></script>
+<script src="https://kit.fontawesome.com/51706dcb62.js" crossorigin="anonymous"></script>
 
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static',filename='css/navbar_style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-    <div>
-    {% block div %}
-    
-    {% endblock %}
+<nav class="nav">
+  <ul class="nav-content">
+    <li class="nav-list">
+      <a href="#" class="link-item active">
+        <i class="fa-solid fa-house-chimney-crack"></i>
+        <span class="link-text">Home</span>
+      </a>
+    </li>
+    <li class="nav-list">
+      <a href="#" class="link-item">
+        <i class="bx bxs-caret-right-square link-icon"></i>
+        <span class="link-text">Content</span>
+      </a>
+    </li>
+    <li class="nav-list">
+      <a href="#" class="link-item">
+        <i class="bx bxs-bar-chart-square link-icon"></i>
+        <span class="link-text">Analytics</span>
+      </a>
+    </li>
+    <li class="nav-list">
+      <a href="#" class="link-item">
+        <i class="bx bxs-message-rounded link-icon"></i>
+        <span class="link-text">Comments</span>
+      </a>
+    </li>
+    <li class="nav-list">
+      <a href="#" class="link-item">
+        <i class="bx bxs-user link-icon"></i>
+        <span class="link-text">Profile</span>
+      </a>
+    </li>
+
+    <span class="indicator"></span>
+  </ul>
+</nav>
+<div class="grid-container">
+  <div class="container">
+    <div class="terminal_toolbar">
+        <div class="butt">
+            <button class="btn btn-color"></button>
+            <button class="btn"></button>
+            <button class="btn"></button>
+        </div>
+        <p class="user">johndoe@admin: ~</p>
+        <div class="add_tab">
+            +
+        </div>
+    </div>
+    <div class="terminal_body">
+        <div class="terminal_promt">
+            <span class="terminal_user">johndoe@admin:</span>
+            <span class="terminal_location">~</span>
+            <span class="terminal_bling">$</span>
+            <span class="terminal_cursor"></span>
+        </div>
+    </div>
+</div>
+<div class="container">
+  <div class="terminal_toolbar">
+      <div class="butt">
+          <button class="btn btn-color"></button>
+          <button class="btn"></button>
+          <button class="btn"></button>
+      </div>
+      <p class="user">johndoe@admin: ~</p>
+      <div class="add_tab">
+          +
+      </div>
   </div>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </head>
-  <body>
-    <nav>
-      <div class="logo">Project</div>
-      </label>
-      <ul>
-        <li><a class="active" href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Gallery</a></li>
-        <li><a href="#">Feedback</a></li>
-      </ul>
-    </nav>
-    {% block textarea %}
-    
-    {% endblock %}
+  <div class="terminal_body">
+      <div class="terminal_promt">
+          <span class="terminal_user">johndoe@admin:</span>
+          <span class="terminal_location">~</span>
+          <span class="terminal_bling">$</span>
+          <span class="terminal_cursor"></span>
+      </div>
+  </div>
+</div>
+<div class="container">
+  <div class="terminal_toolbar">
+      <div class="butt">
+          <button class="btn btn-color"></button>
+          <button class="btn"></button>
+          <button class="btn"></button>
+      </div>
+      <p class="user">johndoe@admin: ~</p>
+      <div class="add_tab">
+          +
+      </div>
+  </div>
+  <div class="terminal_body">
+      <div class="terminal_promt">
+          <span class="terminal_user">johndoe@admin:</span>
+          <span class="terminal_location">~</span>
+          <span class="terminal_bling">$</span>
+          <span class="terminal_cursor"></span>
+      </div>
+  </div>
+</div>
+<div class="container">
+  <div class="terminal_toolbar">
+      <div class="butt">
+          <button class="btn btn-color"></button>
+          <button class="btn"></button>
+          <button class="btn"></button>
+      </div>
+      <p class="user">johndoe@admin: ~</p>
+      <div class="add_tab">
+          +
+      </div>
+  </div>
+  <div class="terminal_body">
+      <div class="terminal_promt">
+          <span class="terminal_user">johndoe@admin:</span>
+          <span class="terminal_location">~</span>
+          <span class="terminal_bling">$</span>
+          <span class="terminal_cursor"></span>
+      </div>
+  </div>
+</div>
+<div class="container">
+  <div class="terminal_toolbar">
+      <div class="butt">
+          <button class="btn btn-color"></button>
+          <button class="btn"></button>
+          <button class="btn"></button>
+      </div>
+      <p class="user">johndoe@admin: ~</p>
+      <div class="add_tab">
+          +
+      </div>
+  </div>
+  <div class="terminal_body">
+      <div class="terminal_promt">
+          <span class="terminal_user">johndoe@admin:</span>
+          <span class="terminal_location">~</span>
+          <span class="terminal_bling">$</span>
+          <span class="terminal_cursor"></span>
+      </div>
+  </div>
+</div>
+<div class="container">
+    <div class="terminal_toolbar">
+        <div class="butt">
+            <button class="btn btn-color"></button>
+            <button class="btn"></button>
+            <button class="btn"></button>
+        </div>
+        <p class="user">johndoe@admin: ~</p>
+        <div class="add_tab">
+            +
+        </div>
+    </div>
+    <div class="terminal_body">
+        <div class="terminal_promt">
+            <span class="terminal_user">johndoe@admin:</span>
+            <span class="terminal_location">~</span>
+            <span class="terminal_bling">$</span>
+            <span class="terminal_cursor"></span>
+        </div>
+    </div>
+</div><div class="container">
+  <div class="terminal_toolbar">
+      <div class="butt">
+          <button class="btn btn-color"></button>
+          <button class="btn"></button>
+          <button class="btn"></button>
+      </div>
+      <p class="user">johndoe@admin: ~</p>
+      <div class="add_tab">
+          +
+      </div>
+  </div>
+  <div class="terminal_body">
+      <div class="terminal_promt">
+          <span class="terminal_user">johndoe@admin:</span>
+          <span class="terminal_location">~</span>
+          <span class="terminal_bling">$</span>
+          <span class="terminal_cursor"></span>
+      </div>
+  </div>
+</div>
 
-  </body>
-</html>
+<div class="container">
+    <div class="terminal_toolbar">
+        <div class="butt">
+            <button class="btn btn-color"></button>
+            <button class="btn"></button>
+            <button class="btn"></button>
+        </div>
+        <p class="user">johndoe@admin: ~</p>
+        <div class="add_tab">
+            +
+        </div>
+    </div>
+    <div class="terminal_body">
+        <div class="terminal_promt">
+            <span class="terminal_user">johndoe@admin:</span>
+            <span class="terminal_location">~</span>
+            <span class="terminal_bling">$</span>
+            <span class="terminal_cursor"></span>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="terminal_toolbar">
+        <div class="butt">
+            <button class="btn btn-color"></button>
+            <button class="btn"></button>
+            <button class="btn"></button>
+        </div>
+        <p class="user">johndoe@admin: ~</p>
+        <div class="add_tab">
+            +
+        </div>
+    </div>
+    <div class="terminal_body">
+        <div class="terminal_promt">
+            <span class="terminal_user">johndoe@admin:</span>
+            <span class="terminal_location">~</span>
+            <span class="terminal_bling">$</span>
+            <span class="terminal_cursor"></span>
+        </div>
+    </div>
+</div><div class="container">
+  <div class="terminal_toolbar">
+      <div class="butt">
+          <button class="btn btn-color"></button>
+          <button class="btn"></button>
+          <button class="btn"></button>
+      </div>
+      <p class="user">johndoe@admin: ~</p>
+      <div class="add_tab">
+          +
+      </div>
+  </div>
+  <div class="terminal_body">
+      <div class="terminal_promt">
+          <span class="terminal_user">johndoe@admin:</span>
+          <span class="terminal_location">~</span>
+          <span class="terminal_bling">$</span>
+          <span class="terminal_cursor"></span>
+      </div>
+  </div>
+</div>
+
+  
+</div>

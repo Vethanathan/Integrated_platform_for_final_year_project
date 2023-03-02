@@ -1,101 +1,179 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Dashboard</title>
+<link rel="icon" href="{{ url_for('static',filename='images/logo.ico') }}">
 
-    <!-- Bootstrap CSS -->
-    <link href="{{ url_for('static',filename='css/yetri.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css/test.css') }}" rel="stylesheet">
+<!-- <link href="{{ url_for('static',filename='css/temp.css') }}" rel="stylesheet"> -->
+<script defer="defer" src="{{ url_for('static',filename='js/test.js') }}"></script>
+<script src="https://kit.fontawesome.com/51706dcb62.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <title>Hello, world!</title>
-  </head>
-  <body>
-    <!-- <h1>Hello, world!</h1> -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{{ url_for('home') }}">My Website</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('upload') }}">Upload</a>
-
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('plaigarism') }}">Plaigarism checker</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Account
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{{ url_for('index') }}">Logout</a>
-              <a class="dropdown-item" href="{{ url_for('accounts')}}">Account Settings</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-        </ul>
-        
-      </div>
-    </nav>
-
-
-      <div class="container mt-5 mb-3">
-        <div class="row">
-           
-          
-    {% for d in data  %}
-
-    <div class="col-md-4">
-      <div class="card p-3 mb-2">
-         <div class="d-flex justify-content-between">
-            <div class="d-flex flex-row align-items-center">
-               <div class="icon"> <i class="bx bxl-mailchimp"></i> </div>
-               <div class="ms-2 c-details">
-                  <h6 class="mb-0">{{ d[0] }}</h6>
-                  <span>{{ d[5] }}</span> 
-               </div>
-            </div>
-            <div class="badge"> <span>{{ d[2] }}</span> </div>
-            <div class="badge"> <span>{{ d[4] }}</span> </div>
-         </div>
-         <div class="mt-5">
-            <h3 class="heading">{{ d[1] }}</h3>
-            <br> 
-            <div class="badge"> <a href={{ d[3] }}><button class="btn btn-primary btn-sm"> <i class="fa fa-plus"></i> Download </button></a> </div>
-            <div class="mt-5"></div>
-         </div>
-      </div>
-   </div>
-
-    {% endfor %}
-
-
-        </div>
-    </div>
-
+<nav class="nav">
+  <ul class="nav-content">
+    <li class="nav-list">
+      <a href="{{ url_for('home') }}" class="link-item active">
+        <i class="fa-solid fa-house-chimney-crack"></i>
+        <span class="link-text">Home</span>
+      </a>
+    </li>
+    <li class="nav-list">
+      <a href="{{ url_for('upload') }}" onclick="delayRedirect(event, '/upload')" class="link-item">
+        <i class="fa-solid fa-upload"></i>
+        <span class="link-text">Upload</span>
+      </a>
+    </li>
+    <li class="nav-list">
+      <a href="{{ url_for('plaigarism') }}" onclick="delayRedirect(event, '/plaigarism')" class="link-item">
+        <i class="fa-regular fa-file-code"></i>
+        <span class="link-text">plagiarism</span>
+      </a>
+    </li>
+    <li class="nav-list">
+      <a href="{{ url_for('chatbot') }}" onclick="delayRedirect(event, '/chatbot')" class="link-item">
+        <i class="fa-solid fa-robot"></i>
+        <span class="link-text">CHAT - GPT</span>
+      </a>
+    </li>
+    <li class="nav-list">
+      <a href="/" onclick="delayRedirect(event, '/')" class="link-item">
+        <i class="fa-solid fa-lock"></i>
+        <span class="link-text">Logout</span>
+      </a>
+    </li>
     
 
-      
-      
+    <span class="indicator"></span>
+  </ul>
+</nav>
 
-    <!-- Optional JavaScript -->
-   <script defer="defer" src="{{ url_for('static',filename='js/navbar.js') }}"></script>
+<div class="grid-container">
+  {% if view=="Linux" %}
+  <style>
+    body{
+      background-image: url(https://wallpapers.com/images/high/funny-official-mascot-tux-linux-desktop-68v6vjigoyh89456.webp);
+      background-size: cover;
+    }
+  </style>
+  {% for d in data %} 
+  <a href={{d[3]}}>
+  <div class="container">
+    <div class="terminal_toolbar">
+        <div class="butt">
+            <button class="btn btn-color"></button>
+            <button class="btn"></button>
+            <button class="btn"></button>
+        </div>
+        <p class="user">{{ d[0] }}: ~</p>
+        <div class="add_tab">
+            +
+        </div>
+    </div>
+    <div class="terminal_body">
+        <div class="terminal_promt">
+            <span class="terminal_user">{{ d[0] }}@admin:</span>
+            <span class="terminal_location">~</span>
+            <span class="terminal_bling">$</span>
+          <span class="terminal_bling">name : ('{{ d[1] }}')</span>
 
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
-</html>
+            <!-- <span class="terminal_cursor"></span> -->
+
+        </div>
+        <div class="terminal_promt">
+          <span class="terminal_user">{{ d[0] }}@admin:</span>
+          <span class="terminal_location">~</span>
+          <span class="terminal_bling">$</span>
+          <span class="terminal_bling">echo dev_in('{{ d[2] }}')</span>
+
+          <!-- <span class="terminal_cursor"></span> -->
+
+      </div>
+      
+    <div class="terminal_promt">
+      <span class="terminal_user">{{ d[0] }}@admin:</span>
+      <span class="terminal_location">~</span>
+      <span class="terminal_bling">$</span>
+      <span class="terminal_bling">echo dev_in('{{ d[4] }}')</span>
+
+      <!-- <span class="terminal_cursor"></span> -->
+
+  </div>
+  <div class="terminal_promt">
+    <span class="terminal_user">{{ d[0] }}@admin:</span>
+    <span class="terminal_location">~</span>
+    <span class="terminal_bling">$</span>
+    <span class="terminal_bling">echo dev_in('{{ d[5] }}')</span>
+
+    <span class="terminal_cursor"></span>
+
+</div>
+
+    </div>
+  </div>
+</a>
+  {% endfor %} 
+  {% endif %} 
+  {% if view=="Developer" %}
+  {% for d in data %} 
+  <style>
+    body{
+      background-image: url(https://c1.wallpaperflare.com/preview/182/936/1023/hacker-silhouette-hack-anonymous.jpg);
+      background-size: cover;
+    }
+  </style>
+  <a href={{d[3]}}>
+
+  <div class="card1">
+    <div class="top">
+        <div class="dots">
+            <div class="dot dot-1"></div>
+            <div class="dot dot-2"></div>
+            <div class="dot dot-3"></div>
+          </div>
+        <p class="g-color">_&gt;</p>
+    </div>
+    <div class="bottom">
+        <p class="code">
+            <span class="red">class</span> <span class="violet">Project:</span><br>
+                <span class="red space-2">def__init__</span><span class="orange">(</span><span class="red">self,Proj,Author,lang,date,time</span><span class="orange">):</span><br>
+                <span class="blue space-4x2">self</span><span class="white">.</span><span class="violet">Proj</span><span class="white">=</span><span class="blue">Proj</span><br>
+                <span class="blue space-4x2">self</span><span class="white">.</span><span class="violet">Author</span><span class="white">=</span><span class="blue">Author</span><br>
+                <span class="blue space-4x2">self</span><span class="white">.</span><span class="violet">lang</span><span class="white">=</span><span class="blue">lang</span><br>
+                <span class="blue space-4x2">self</span><span class="white">.</span><span class="violet">date</span><span class="white">=</span><span class="blue">date</span><br>
+                <span class="blue space-4x2">self</span><span class="white">.</span><span class="violet">time</span><span class="white">=</span><span class="blue">time</span><br>
+            
+            <!-- <br> -->
+            <span class="violet">Project</span><span class="blue">('{{d[1]}},{{d[0]}},{{d[2]}},{{d[5]}},{{d[4]}}')</span>
+        </p>            
+    </div>
+  </div>
+
+  </a>
+  {% endfor %} 
+  {% endif %}
+  {% if view=="Normal" %}
+  <style>
+    body{
+      background-image: url(https://img.freepik.com/free-vector/flat-geometric-background_23-2148957201.jpg?w=1380&t=st=1677245711~exp=1677246311~hmac=64dbec782e4fee2be04172c25d5da036a68dc2449e4587906460d8e75f009d8f);
+    }
+  </style>
+  {% for d in data %} 
+  <a href={{d[3]}}>
+
+  <div class="card">
+    <div class="card__content">
+      <div class="card__date"> {{d[1]}}
+      </div>
+      <div class="card__info">
+        <h2>Name:</h2>
+        <h4>{{d[0]}}</h4>
+        <h2>Developed in :</h2>
+        <h4>{{d[2]}}</h4>
+        <h2>Time :</h2>
+        <h4>{{d[4]}}</h4>
+        <h2>Date :</h2>
+        <h4>{{d[5]}}</h4>
+      </div>
+    </div>
+  </div>
+  </a>
+  {% endfor %} 
+  {% endif %}
+</div>

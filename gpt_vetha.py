@@ -1,7 +1,7 @@
 import os
 import openai
 def answer(argument):
-    openai.api_key = "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"
+    openai.api_key = ""
     # argument = "what is your purpose?"
     response = openai.Completion.create(
     model="text-davinci-003",

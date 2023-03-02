@@ -244,6 +244,14 @@ input{
     border-bottom: 1px solid #4d4449;
     font-family: 'Ubuntu', sans-serif;
 }
+.input-box {
+    width: 300px;
+    height: 40px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid gray;
+    border-radius: 5px;
+  }
 .fa{
 color:#4d4449; 
 font-size: 20px;

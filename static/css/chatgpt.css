@@ -70,7 +70,7 @@ nav{
 .indicator {
   position: absolute;
   top: -14px;
-  left: 238px;
+  left: 333px;
   height: 36px;
   width: 36px;
   background-image: url('https://cdn-icons-png.flaticon.com/512/7757/7757839.png');
@@ -249,22 +249,3 @@ i {
       background: #ffffff;
     }
   }
-
-.container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  grid-gap: 20px;
-}
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-.grid-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ddd;
-  padding: 20px;
-}
