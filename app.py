@@ -49,7 +49,7 @@ global global_dict
 file_name=''
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey'
-app.config['UPLOAD_FOLDER'] = 'static/files'
+app.config['UPLOAD_FOLDER'] = os.getcwd()
 app.secret_key='a'
 
 class UploadFileForm(FlaskForm):
@@ -187,8 +187,8 @@ def upload():
         form.Author_Name.data = ' '
         file = form.file.data
         current_filename = file.filename
-        file.save("static/files/"+file.filename)
-        supabase.storage().from_("vetha").upload(file.filename,"static/files/"+file.filename)
+        file.save(os.getcwd()+file.filename)
+        supabase.storage().from_("vetha").upload(file.filename,os.getcwd()+file.filename)
         url = supabase.storage().from_("vetha").get_public_url(file.filename)
         print(url)
         # exit()
