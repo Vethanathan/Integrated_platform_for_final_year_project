@@ -262,4 +262,5 @@ def plaigarism():
     return render_template("plaigarism.html",form=form,view=view,textarea=textarea)
 
 
-app.run(debug=1)
+#app.run(debug=1)
+app.run(debug=True, port=os.getenv("PORT", default=5000))
