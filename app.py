@@ -21,8 +21,8 @@ import plotly.graph_objs as go
 #load_dotenv()
 import os
 from supabase import create_client
-url ="https://hzmzxhzqslaoahheatdf.supabase.co"
-key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh6bXp4aHpxc2xhb2FoaGVhdGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzUxNzcxODEsImV4cCI6MTk5MDc1MzE4MX0.BanV3RYn5QMXRMIIpCqGBplJllb57GAKKVpTpwl-xys"
+url =""
+key = ""
 supabase = create_client(url, key)
 
 def hi(h):
